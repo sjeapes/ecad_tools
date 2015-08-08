@@ -6,10 +6,11 @@
 # Author: Steve Jeapes (netlist@arcoarena.co.uk)
 # Creation Date: 6th Aug 15
 #==============================================================================
+import re
 
 def import_netlist(netlist_file):
     """Takes a filename of a PADS netlist
-    Returns a netlist as a list of tuples of (Netname, List of Connections)
+    Returns a netlist as a list of tuples of (Netname, List of (RefDes, Pin#))
     """
     try:
         f = open(netlist_file,'r')
@@ -38,8 +39,11 @@ def import_netlist(netlist_file):
     
     netlist = []
     for net in list_of_nets[1:]:
-        net_split = net.split(' ')
-        netlist.append((net_split[0],net_split[1:]))
+        net_split = re.split(r'[ .]',net)
+        nodes = []
+        for i in range(1, len(net_split)-1, 2):
+            nodes.append({'refdes':net_split[i], 'pin':net_split[i+1]})
+        netlist.append((net_split[0],nodes))
         
     return netlist
     
