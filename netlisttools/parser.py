@@ -46,5 +46,3 @@ def import_netlist(netlist_file):
         netlist.append((net_split[0],nodes))
         
     return netlist
-    
-#import_netlist('/home/sjeapes/Dropbox/Projects/NetlistTools/example_files/XA-021448-DG Low Resolution FPC ver 2.NET')

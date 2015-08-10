@@ -6,7 +6,8 @@
 # Author: Steve Jeapes (netlist@arcoarena.co.uk)
 # Creation Date: 6th Aug 15
 #==============================================================================
-import re, netlist_import
+
+import re, parser 
 
 def orphan_nets(netlist):
     orphans = []
@@ -31,15 +32,17 @@ def testpoint_only(netlist):
     for net in netlist:
         if len(net[1]) == 2:
             for node in net[1]:
-                if re.match(r'[Tt][Pp]',node['refdes']):
+                if re.match(r'[Tt][PpHhVv]',node['refdes']):
                    testpoint.append(net[0])
     return testpoint
 
 
+        
+
 #----------------------------
 # Debug Code
 #---------------------------
-netlist = netlist_import.import_netlist('/home/sjeapes/Dropbox/Projects/NetlistTools/example_files/netlist.NET')
+netlist = parser.import_netlist('../example_files/netlist.NET')
 #print(netlist)
 print identify_power(netlist)
 print orphan_nets(netlist)
