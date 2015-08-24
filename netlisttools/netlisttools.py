@@ -7,7 +7,7 @@
 # Creation Date: 6th Aug 15
 #==============================================================================
 
-import re, parser 
+import re, netlistparser, sqlite3
 
 def orphan_nets(netlist):
     orphans = []
@@ -36,14 +36,44 @@ def testpoint_only(netlist):
                    testpoint.append(net[0])
     return testpoint
 
+db = sqlite3.connect(':memory:')
+def init_db(cursor):
+    cursor.execute('''
+    CREATE TABLE components(
+        Row INTEGER,
+        RefDes TEXT,
+        Pin TEXT)
+    '''))
+cursor = db.cursor()
+init_db(cursor)
 
+def component_connections(netlist):
+    ref_des_list = []
+    per_pin_list = []
+    #Get list of unique components ref_Des    
+    for net in netlist:
+        for component in net[1]:       
+            per_pin_list.append(component)
+            if not(component['refdes'] in ref_des_list):
+                ref_des_list.append(component['refdes'])
+    
+    #For each component ref des create  list of [refdes, 
+    for refdes in ref_des_list:
         
+
+        return ref_des_list
 
 #----------------------------
 # Debug Code
 #---------------------------
-netlist = parser.import_netlist('../example_files/netlist.NET')
+netlist = netlistparser.parse('../example_files/netlist.NET')
 #print(netlist)
-print identify_power(netlist)
-print orphan_nets(netlist)
-print testpoint_only(netlist)
+power = identify_power(netlist)
+orphans= orphan_nets(netlist)
+testpoints= testpoint_only(netlist)
+components = component_connections(netlist)
+
+print power
+print orphans
+print testpoints
+print components

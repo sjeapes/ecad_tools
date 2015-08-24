@@ -8,7 +8,7 @@
 #==============================================================================
 import re
 
-def import_netlist(netlist_file):
+def parse(netlist_file):
     """Takes a filename of a PADS netlist
     Returns a netlist as a list of tuples of (Netname, List of (RefDes, Pin#))
     """
@@ -39,6 +39,12 @@ def import_netlist(netlist_file):
     
     netlist = []
     for net in list_of_nets[1:]:
+        #Check for Space in Netname
+        net_split = re.split(r'[A-Z|a-z|0-9|_|-]+[.][A-Z|a-z|0-9|_|-]+',net)   
+        net_split = re.split(r'[ ]',net_split[0])
+        if re.split(r'[ ]',net_split[0])>1:
+            if not net_split[1] == '' :
+                raise ValueError('Netlist has spaces or other invalid characters in name ' + str(net_split))
         net_split = re.split(r'[ .]',net)
         nodes = []
         for i in range(1, len(net_split)-1, 2):
