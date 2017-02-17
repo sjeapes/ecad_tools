@@ -6,7 +6,6 @@ setup(name='netlisttools',
       url='http://github.com/sjeapes/netlisttools',
       author='Stephen Jeapes',
       author_email='netlisttools@arcoarena.co.uk',
-      license='GPLv3',
+      license='GPLv2',
       packages=['netlisttools'],
-      install_required]['re']
       zip_safe=False)
